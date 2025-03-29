@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consecuencias.</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-align: top;
+        }
+
+        textarea {
+            width: 10%;
+            height: 2%;
+            background-color: #ffffff;
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>...Recuerdas quién te metió en todo esto?</h1>
+    <textarea id="textArea" placeholder=""></textarea>
+
+    <script>
+        const textarea = document.getElementById('textArea');
+        const h1 = document.querySelector('h1');
+
+        textarea.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const input = textarea.value.trim().toLowerCase();
+
+        if (input === 'soyzeb') {
+            h1.textContent = '';
+            const link = document.createElement('a');
+            link.href = 'https://drive.google.com/file/d/1tmP6fFu4zlflsJinuZAPblD86bSONFwu/view?usp=sharing';
+            link.textContent = '10 Segundos.';
+            link.style.color = 'white';
+            link.style.fontSize = '20px';
+            link.style.textDecoration = 'none';
+
+            textarea.style.display = 'none';
+            document.body.appendChild(link);
+
+            link.addEventListener('click', function() {
+                window.location.href = link.href;
+            });
+        } else if (input === 'baseplate') {
+            window.location.href = 'https://drive.google.com/file/d/1-IZVC2J2kADhSL4EoeaWlGArYK3ik8jI/view?usp=sharing';
+        }
+    }
+});
+
+    </script>
+</body>
+</html>

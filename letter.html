@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title></title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        #flipText {
+            position: absolute;
+            right: 10%;
+            color: white;
+            font-size: 2rem;
+            opacity: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .clicked {
+            color: green;
+        }
+
+        #flattenWindow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            color: white;
+            text-align: center;
+        }
+
+        #flattenWindow button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #flattenWindow button:hover {
+            background-color: #333;
+        }
+
+        #redirectText {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 1.2rem;
+    font-family: 'blancnote-sans', sans-serif;
+}
+
+#redirectText a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#redirectText a:hover {
+    text-decoration: underline;
+}
+
+    </style>
+
+<script>
+    function preloadImages(images) {
+        images.forEach((imageSrc) => {
+            const img = new Image();
+            img.src = imageSrc;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        preloadImages([
+            "/media/uno.png",
+            "/media/dos.png",
+            "/media/tres.png",
+            "/media/cuatro.png",
+            "/media/cara1.png",
+            "/media/cara1LISA.png",
+            "/media/cara2LISA.png",
+            "/media/cara2.png"
+        ]);
+    });
+</script>
+
+
+</head>
+<body>
+    <img id="mainImage" src="/media/uno.png" alt="Imagen central">
+    <audio id="backgroundMusic" src="/media/letter.wav" loop></audio>
+    <div id="flipText">TURN OVER?</div>
+
+    <div id="flattenWindow">
+        <h2>FLATTEN?</h2>
+        <button id="btnYes">Y</button>
+        <button id="btnNo">N</button>
+    </div>
+
+    <div id="redirectText">
+        <a href="https://contraposicion.xyz/past" target="_blank">Just as it ever should have been.</a>
+    </div>    
+
+    <script>
+        const imageElement = document.getElementById('mainImage');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const flipText = document.getElementById('flipText');
+        const flattenWindow = document.getElementById('flattenWindow');
+        const btnYes = document.getElementById('btnYes');
+        const btnNo = document.getElementById('btnNo');
+        const imageSequence = [
+            '/media/dos.png',
+            '/media/tres.png',
+            '/media/cuatro.png',
+            '/media/cara1.png'
+        ];
+        let currentImageIndex = 0;
+        let isZoomed = false;
+
+        imageElement.addEventListener('click', () => {
+            if (currentImageIndex < imageSequence.length) {
+                imageElement.src = imageSequence[currentImageIndex];
+                currentImageIndex++;
+
+                if (imageSequence[currentImageIndex - 1].includes('cara1.png')) {
+                    backgroundMusic.play();
+                    document.title = "...A LETTER";
+
+                    setTimeout(() => {
+                        flipText.style.opacity = 1;
+                    }, 5000);
+                    
+                    flattenWindow.style.display = 'block';
+                }
+            }
+
+            if (imageElement.src.includes('cara1.png')) {
+                if (!isZoomed) {
+                    imageElement.style.transform = 'scale(2)';
+                    imageElement.style.cursor = 'zoom-out';
+                    isZoomed = true;
+                } else {
+                    imageElement.style.transform = 'scale(1)';
+                    imageElement.style.cursor = 'zoom-in';
+                    isZoomed = false;
+                }
+            }
+        });
+
+        btnYes.addEventListener('click', () => {
+            flattenWindow.style.display = 'none';
+
+            imageElement.style.opacity = '0';
+            setTimeout(() => {
+                imageElement.src = '/media/cara1LISA.png';
+                imageElement.style.opacity = '1';
+            }, 1200);
+
+            flipText.addEventListener('click', () => {
+                if (imageElement.src.includes('cara1LISA.png')) {
+                    imageElement.src = '/media/cara2LISA.png';
+                } else if (imageElement.src.includes('cara2LISA.png')) {
+                    imageElement.src = '/media/cara1LISA.png';
+                }
+            });
+        });
+
+        btnNo.addEventListener('click', () => {
+            flattenWindow.style.display = 'none';
+        });
+
+        flipText.addEventListener('click', () => {
+            flipText.classList.add('clicked');
+            if (imageElement.src.includes('cara1.png')) {
+                imageElement.src = '/media/cara2.png';
+            } else if (imageElement.src.includes('cara2.png')) {
+                imageElement.src = '/media/cara1.png';
+            }
+        });
+
+        setInterval(() => {
+            if (flipText.style.opacity === '1') { 
+                const randomX = (Math.random() - 0.5) * 6; 
+                const randomY = (Math.random() - 0.5) * 6; 
+
+                flipText.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            }
+        }, 200);
+    </script>
+</body>
+</html>
